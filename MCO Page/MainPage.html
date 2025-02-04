@@ -49,6 +49,12 @@
             font-weight: bold;
         }
 
+        a {
+            text-decoration: none;
+            color: red;
+            font-weight: bold;
+        }
+
         .burger-menu {
             display: flex;
             flex-direction: column;
@@ -65,7 +71,7 @@
         /* Hero Section */
         .hero-section {
             display: flex;
-            justify-content: space-between;
+            justify-content: center; /* Centering horizontally */
             align-items: center;
             padding: 50px;
             background-color: #f5f5f5;
@@ -76,8 +82,11 @@
         .text-container h1 {
             font-style: italic;
             font-size: 72px;
+            padding-right: 75px;
             color: red;
             line-height: 1;
+            text-align: center; /* Ensures text is centered */
+            margin: 0 auto; /* Centers the text block */
         }
 
         .image-container img {
@@ -91,13 +100,13 @@
         .image-container2 {
             display: flex;
             justify-content: space-between;
-            gap: 20px;
+            gap: 10px; /* Adjusted the gap */
             flex-wrap: wrap;
             padding: 20px;
         }
 
         .image-item {
-            width: 23%; /* Adjust this value to control the size of each item */
+            width: 22%; /* Adjusted to be closer together */
             text-align: center;
         }
 
@@ -111,7 +120,7 @@
 
         .image-text {
             margin-top: 4px;
-            text-align: left;
+            text-align: center; /* Center the text */
             font-size: 18px;
             font-weight: bold;
             color: red;
@@ -146,36 +155,44 @@
 
     <!-- Hero Section -->
     <div class="hero-section">
-        <div class="text-container" style="text-align: center;">
+        <div class="text-container">
             <h1>DIMSUM  <br>TREATS </h1>
         </div>
         <div class="image-container">
-            <img src="dumpling1.png" alt="Dumpling">
+            <img src="Files\images\dumpling1.png" alt="Dumpling">
         </div>
     </div>
 
     <!-- See more!-->
     <div class="show-more">
-        <a href="#"> SHOW MORE PWET PWET PWET PWET PWET --> </a>
+        <a href="#"> SHOW MORE --> </a>
     </div>
 
     <!-- Sample Items -->
     <div class="image-container2">
         <div class="image-item">
-            <img src="siomai.png" alt="Siomai">
-            <p class="image-text">SIOMAI</p>
+            <a href="#">
+                <img src="Files\images\siomai.png" alt="Siomai">
+                <p class="image-text">SIOMAI</p>
+            </a>
         </div>
         <div class="image-item">
-            <img src="sharksfin.jpg" alt="Sharks Fin">
-            <p class="image-text">SHARKS FIN</p>
+            <a href="#">
+                <img src="Files\images\sharksfin.jpg" alt="Sharks Fin">
+                <p class="image-text">SHARKS FIN</p>
+            </a>
         </div>
         <div class="image-item">
-            <img src="ricemeal.jpg" alt="Rice Meal">
-            <p class="image-text">RICE MEAL</p>
+            <a href="#">
+                <img src="Files\images\ricemeal.jpg" alt="Rice Meal">
+                <p class="image-text">RICE MEAL</p>
+            </a>
         </div>
         <div class="image-item">
-            <img src="japsiomai.jpg" alt="Japanese Siomai">
-            <p class="image-text">JAPANESE SIOMAI</p>
+            <a href="#">
+                <img src="Files\images\japsiomai.jpg" alt="Japanese Siomai">
+                <p class="image-text">JAPANESE SIOMAI</p>
+            </a>
         </div>
     </div>
 
