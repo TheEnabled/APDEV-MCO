@@ -54,6 +54,10 @@ body, html {
     font-weight: bold;
 }
 
+.nav-links a:hover{
+    color: pink;
+}
+
 a {
     text-decoration: none;
     color: red;
@@ -144,3 +148,18 @@ hr {
     width: 100%;
     border: 1px solid red;
 }
+
+.menu-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 2rem; /* Adjust size if needed */
+    color: red; /* Icon color */
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu-button:hover {
+    color: #ffc0cb; /* Hover color */
+    transition: color 0.3s ease;
+  }

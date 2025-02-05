@@ -1,0 +1,76 @@
+body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-bar {
+    background-color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.nav-links a {
+    color: red;
+    margin-right: 20px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: #ffc0cb;
+}
+
+.account-container {
+    padding: 120px 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: red;
+    margin-bottom: 20px;
+}
+
+.account-options button,
+.user-list button {
+    background-color: #ffc0cb;
+    border: 2px solid red;
+    color: red;
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.account-options button:hover,
+.user-list button:hover {
+    background-color: red;
+    color: white;
+}
+
+.account-details p {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+.account-details a {
+    color: red;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.account-details a:hover {
+    color: #ffc0cb;
+}
