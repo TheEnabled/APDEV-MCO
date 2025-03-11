@@ -64,18 +64,27 @@ a {
     font-weight: bold;
 }
 
-.burger-menu {
+.nav-icons {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
+    align-items: center;
+    gap: 15px;
 }
 
-.burger-menu div {
-    width: 30px;
-    height: 4px;
-    background-color: red;
+.menu-button, .user-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 2rem;
+    color: red;
+    display: flex;
+    align-items: center;
 }
+  
+.menu-button:hover, .user-button:hover {
+    color: #ffc0cb;
+    transition: color 0.3s ease;
+}
+
 
 /* Hero Section */
 .hero-section {
