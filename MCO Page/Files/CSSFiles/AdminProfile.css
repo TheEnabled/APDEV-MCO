@@ -1,0 +1,90 @@
+/* General Styles */
+body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: #f9f9f9;
+    color: #d00000;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Navigation Bar */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 2px solid red;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: red;
+    font-weight: bold;
+    margin: 0 15px;
+}
+
+.menu-button {
+    font-size: 24px;
+    color: red;
+}
+
+/* Account Information Section */
+.account-info h1 {
+    font-size: 36px;
+    margin: 20px 0;
+}
+
+.role-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.role {
+    padding: 10px 20px;
+    font-weight: bold;
+    border: 2px solid red;
+    background: none;
+    color: red;
+    border-radius: 20px;
+}
+
+.user-details p {
+    font-size: 18px;
+}
+
+.user-details a {
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Other Users Section */
+.other-users h2 {
+    font-size: 32px;
+    margin-top: 30px;
+}
+
+.user-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    justify-content: center;
+}
+
+.user {
+    padding: 10px;
+    font-weight: bold;
+    border: 2px solid red;
+    background: none;
+    color: red;
+    border-radius: 20px;
+    cursor: pointer;
+}
