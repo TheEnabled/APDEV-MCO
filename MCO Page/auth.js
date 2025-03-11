@@ -1,29 +1,25 @@
 document.addEventListener("DOMContentLoaded", function () {
     const loginForm = document.getElementById("login-form");
-    const signupForm = document.getElementById("signup-form");
 
     if (loginForm) {
         loginForm.addEventListener("submit", async function (event) {
             event.preventDefault();
-    
             const username = document.getElementById("login-username").value;
             const password = document.getElementById("login-password").value;
-    
+
             try {
                 const response = await fetch("http://localhost:3000/api/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username, password }),
                 });
-    
+
                 const result = await response.json();
-                console.log("🔍 Login Response:", result); // <-- Debugging line
-    
                 if (response.ok && result.success) {
                     alert("✅ Login successful!");
-                    localStorage.setItem("token", result.token); // Store JWT token
-                    console.log("📌 Token saved:", result.token); // <-- Debugging line
-                    window.location.href = "MainPage.html"; // Redirect
+                    localStorage.setItem("token", result.token);
+                    localStorage.setItem("role", result.role); // Store role
+                    window.location.href = "MainPage.html"; // Redirect after login
                 } else {
                     alert("❌ Login failed: " + result.message);
                 }
@@ -33,35 +29,37 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-    
-    
+});
 
-    if (signupForm) {
-        signupForm.addEventListener("submit", async function (event) {
-            event.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+    const profileButton = document.querySelector(".menu-button");
 
-            const username = document.getElementById("signup-username").value;
-            const email = document.getElementById("signup-email").value;
-            const password = document.getElementById("signup-password").value;
+    if (profileButton) {
+        profileButton.addEventListener("click", () => {
+            const role = localStorage.getItem("role");
 
-            try {
-                const response = await fetch("http://localhost:3000/api/signup", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, email, password }),
-                });
+            if (role === "admin") {
+                window.location.href = "AdminProfile.html";
+            } else {
+                window.location.href = "UserAccount.html";
+            }
+        });
+    }
+});
 
-                const result = await response.json();
+document.addEventListener("DOMContentLoaded", () => {
+    const profileButton = document.getElementById("profile-button");
 
-                if (response.ok && result.success) {
-                    alert("✅ Signup successful! Please log in.");
-                    window.location.href = "Login.html"; // Redirect to login page
-                } else {
-                    alert("❌ Signup failed: " + result.message);
-                }
-            } catch (error) {
-                console.error("🔥 Signup Error:", error);
-                alert("❌ Signup error. Check console.");
+    if (profileButton) {
+        profileButton.addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            
+            const role = localStorage.getItem("role");
+
+            if (role === "admin") {
+                window.location.href = "AdminProfile.html";
+            } else {
+                window.location.href = "UserAccount.html";
             }
         });
     }

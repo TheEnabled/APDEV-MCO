@@ -28,9 +28,18 @@
               <a href="Login.html">LOG IN</a>
             </div>
             <!-- Burger Menu Icon as a Button -->
-            <a href="account.html" class="menu-button">
-              <i class='bx bx-menu'></i>
-            </a>
+            <!-- User and Menu Icons -->
+            <div class="nav-icons">
+                <a href="#" id="profile-button">
+                    <i class='bx bxs-user-circle'></i>
+                </a>
+                <a href="account.html" class="menu-button">
+                    <i class='bx bx-menu'></i>
+                </a>
+            </div>
+            
+            <script src="auth.js"></script> <!-- Ensure this script is included -->
+            
         </div>
 
         <!-- Hero Section -->
@@ -43,20 +52,20 @@
             </div>
         </div>
 
-        <div class="login-all-container">
-            <div class="wrapper">
-                <form id="login-form">
-                    <h1>Login</h1>
-                    <div class="input-box">
-                        <input type="text" id="login-username" placeholder="Username" required>
-                    </div>
-                    <div class="input-box">
-                        <input type="password" id="login-password" placeholder="Password" required>
-                    </div>
-                    <button type="submit" class="btn">Login</button>
-                    <p>Don't have an account? <a href="SignUp.html">Register</a></p>
-                </form>
-            </div>
+        <div class="login-container">
+            <h1>Login</h1>
+            <form id="login-form">
+                <div class="input-box">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" required>
+                </div>
+                <div class="input-box">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="SignUp.html">Register</a></p>
         </div>
 
         <!-- Horizontal Line -->

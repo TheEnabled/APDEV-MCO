@@ -18,25 +18,27 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 const UserSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     email: { type: String, unique: true, required: true },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    role: { type: String, default: "user" }
 });
 
 const User = mongoose.model("User", UserSchema);
 
-// Signup Route
+// Signup Route 
 app.post("/api/signup", async (req, res) => {
     try {
         const { username, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({ username, email, password: hashedPassword });
         await newUser.save();
-        res.json({ success: true, message: "User registered successfully!" });
+        res.json({ success: true, message: "Admin registered successfully!" });
     } catch (error) {
-        res.json({ success: false, message: "Error registering user" });
+        console.error("Signup Error:", error);
+        res.json({ success: false, message: "Error registering admin" });
     }
 });
 
-// Login Route
+// Login Route (For both Users & Admins)
 app.post("/api/login", async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -47,9 +49,11 @@ app.post("/api/login", async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.json({ success: false, message: "Incorrect password" });
 
-        const token = jwt.sign({ username: user.username }, "secret_key", { expiresIn: "1h" });
-        res.json({ success: true, token });
+        // Generate JWT with role
+        const token = jwt.sign({ username: user.username, role: user.role }, "secret_key", { expiresIn: "1h" });
+        res.json({ success: true, token, role: user.role }); // Send role in response
     } catch (error) {
+        console.error("Login Error:", error);
         res.json({ success: false, message: "Login error" });
     }
 });
