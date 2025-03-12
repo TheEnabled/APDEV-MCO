@@ -4,10 +4,10 @@
     justify-content: center;
 }
 
-.locations-header h1{
+.locations-header {
     color: red;
-    font-style: italic;
     font-size: 70px;
+    padding: 20px;
 }
 
 .location-item {

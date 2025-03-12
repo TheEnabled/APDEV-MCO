@@ -1,0 +1,72 @@
+.branch {
+    display: flex;
+    align-items: center; /* Center the content horizontally */
+    justify-content: center; /* Center the branch-item */
+    flex-direction: column;
+    width: 100%;
+}
+
+.branch-header {
+    color: red;
+    font-size: 70px;
+    padding: 20px;
+}
+
+.branch-item {
+    width: 90%; /* Takes up almost the entire page width */
+    max-width: 1200px; /* Prevents it from being too wide on large screens */
+    border: solid red;
+    padding: 20px;
+    border-width: 2px;
+    border-radius: 15px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.branch-name {
+    font-size: 30px;
+    color: red;
+}
+
+.branch-contact {
+    margin: 10px 0;
+}
+
+.branch-contact p {
+    margin: 0;
+    font-size: 18px;
+    color: red;
+}
+
+.review-divider {
+    width: 100%;
+    border: none;
+    border-top: 2px solid red; /* Red line for separation */
+    margin: 10px 0; /* Add some spacing */
+}
+
+.review-header {
+    font-size: 24px;
+    color: red;
+}
+
+.review-textbox {
+    width: 100%; /* Ensures the text box takes the full width */
+}
+
+.review-textbox textarea {
+    width: 100%; /* Make sure the textarea fills its container */
+    height: 100px;
+    padding: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.publish-btn {
+    margin-top: 10px;
+    color: white;
+    background-color: red;
+}
