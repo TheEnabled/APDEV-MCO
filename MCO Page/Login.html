@@ -27,7 +27,6 @@
               <a href="Cart.html">CART</a>
               <a href="Login.html">LOG IN</a>
             </div>
-            <!-- Burger Menu Icon as a Button -->
             <!-- User and Menu Icons -->
             <div class="nav-icons">
                 <a href="#" id="profile-button">
@@ -37,14 +36,11 @@
                     <i class='bx bx-menu'></i>
                 </a>
             </div>
-            
-            <script src="auth.js"></script> <!-- Ensure this script is included -->
-            
         </div>
 
         <!-- Hero Section -->
         <div class="login-hero-section">
-            <div class="login-text-container" style="text-align: center;">
+            <div class="login-text-container">
                 <h1>DIMSUM  <br>TREATS </h1>
             </div>
             <div class="login-image-container">
@@ -52,20 +48,29 @@
             </div>
         </div>
 
-        <div class="login-container">
-            <h1>Login</h1>
-            <form id="login-form">
-                <div class="input-box">
-                    <label for="login-username">Username</label>
-                    <input type="text" id="login-username" required>
-                </div>
-                <div class="input-box">
-                    <label for="login-password">Password</label>
-                    <input type="password" id="login-password" required>
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            <p>Don't have an account? <a href="SignUp.html">Register</a></p>
+        <!-- Login Form Section -->
+        <div class="login-all-container">
+            <div class="wrapper">
+                <h1>Login</h1>
+                <form id="login-form">
+                    <div class="input-box">
+                        <input type="text" id="username" placeholder="Username" required>
+                        <i class='bx bxs-user'></i>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" id="password" placeholder="Password" required>
+                        <i class='bx bxs-lock-alt'></i>
+                    </div>
+                    <div class="remember-forgot">
+                        <label><input type="checkbox"> Remember me</label>
+                        <a href="#">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <div class="register-link">
+                        <p>Don't have an account? <a href="SignUp.html">Register</a></p>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <!-- Horizontal Line -->
@@ -73,5 +78,4 @@
         <script src="auth.js"></script>
     </div>
 </body>
-
 </html>

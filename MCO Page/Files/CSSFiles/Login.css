@@ -2,6 +2,7 @@ body, html {
     height: 100%;  
     margin: 0;
     padding: 0;
+    font-family: 'DM Sans', sans-serif;
 }
 
 .login-page-container {
@@ -44,6 +45,7 @@ body, html {
     justify-content: center;
     align-items: center;
     padding: 20px;
+    margin-bottom: 40px;
 }
 
 .wrapper {
@@ -58,6 +60,7 @@ body, html {
 .wrapper h1 {
     text-align: center;
     margin-bottom: 30px;
+    color: #333;
 }
 
 .input-box {
@@ -67,27 +70,36 @@ body, html {
 
 .input-box input {
     width: 100%;
-    padding: 10px;
+    padding: 10px 30px 10px 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .input-box i {
     position: absolute;
     top: 50%;
-    right: 5px;
+    right: 10px;
     transform: translateY(-50%);
+    color: #666;
 }
 
 .remember-forgot {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .remember-forgot label {
     font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.remember-forgot label input {
+    margin-right: 5px;
 }
 
 .remember-forgot a {
@@ -102,13 +114,14 @@ body, html {
 
 .btn {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background-color: red;
     color: white;
     border: none;
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .btn:hover {
@@ -120,9 +133,14 @@ body, html {
     margin-top: 20px;
 }
 
+.register-link p {
+    margin: 0;
+}
+
 .register-link a {
     color: red;
     text-decoration: none;
+    font-weight: 500;
 }
 
 .register-link a:hover {
@@ -134,4 +152,26 @@ body, html {
     width: 100%;
     border: 1px solid red;
     margin-top: auto; /* Push the <hr> to the bottom of the page */
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .login-hero-section {
+        flex-direction: column;
+        padding: 30px;
+    }
+    
+    .login-text-container h1 {
+        padding-right: 0;
+        margin-bottom: 20px;
+        font-size: 48px;
+    }
+    
+    .login-image-container img {
+        width: 200px;
+    }
+    
+    .wrapper {
+        padding: 30px 20px;
+    }
 }

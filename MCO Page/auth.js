@@ -1,65 +1,56 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const loginForm = document.getElementById("login-form");
-
+// Ensure the document is fully loaded before running scripts
+window.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('login-form');
     if (loginForm) {
-        loginForm.addEventListener("submit", async function (event) {
+        loginForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-            const username = document.getElementById("login-username").value;
-            const password = document.getElementById("login-password").value;
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
             try {
-                const response = await fetch("http://localhost:3000/api/login", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password }),
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
                 });
 
-                const result = await response.json();
-                if (response.ok && result.success) {
-                    alert("✅ Login successful!");
-                    localStorage.setItem("token", result.token);
-                    localStorage.setItem("role", result.role); // Store role
-                    window.location.href = "MainPage.html"; // Redirect after login
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('role', data.role);
+                    localStorage.setItem('token', data.token);
+                    alert('Login successful!');
+                    window.location.href = 'UserAccount.html';
                 } else {
-                    alert("❌ Login failed: " + result.message);
+                    alert('Invalid username or password.');
                 }
             } catch (error) {
-                console.error("🔥 Login Error:", error);
-                alert("❌ Login error. Check console.");
+                console.error('Login Error:', error);
+                alert('An error occurred. Please try again.');
             }
         });
     }
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-    const profileButton = document.querySelector(".menu-button");
+    // User Authentication Check
+    const userButton = document.querySelector('.user-button');
+    if (userButton) {
+        userButton.addEventListener('click', (event) => {
+            const token = localStorage.getItem('token');
+            const role = localStorage.getItem('role');
 
-    if (profileButton) {
-        profileButton.addEventListener("click", () => {
-            const role = localStorage.getItem("role");
-
-            if (role === "admin") {
-                window.location.href = "AdminProfile.html";
-            } else {
-                window.location.href = "UserAccount.html";
+            if (!token || !role) {
+                event.preventDefault();
+                alert('You need to log in!');
+                return;
             }
-        });
-    }
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-    const profileButton = document.getElementById("profile-button");
-
-    if (profileButton) {
-        profileButton.addEventListener("click", (event) => {
-            event.preventDefault(); // Prevent default link behavior
-            
-            const role = localStorage.getItem("role");
-
-            if (role === "admin") {
-                window.location.href = "AdminProfile.html";
+            // Redirect to the appropriate page based on role
+            if (role === 'admin') {
+                userButton.setAttribute('href', 'AdminProfile.html');
             } else {
-                window.location.href = "UserAccount.html";
+                userButton.setAttribute('href', 'UserAccount.html');
             }
         });
     }
