@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Serve static files from the "MCO Page" directory
+// Serve static files from your public folder (adjust if necessary)
 app.use(express.static(path.join(__dirname, "MCO Page")));
 
 // Connect to MongoDB
@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
     .then(() => console.log("✅ Connected to MongoDB"))
     .catch(err => console.log("❌ MongoDB Connection Error:", err));
 
-// User Schema
+// User Schema and Model
 const UserSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     email: { type: String, unique: true, required: true },
@@ -27,7 +27,6 @@ const UserSchema = new mongoose.Schema({
     fullName: { type: String },
     phone: { type: String }
 });
-
 const User = mongoose.model("User", UserSchema);
 
 // Signup Route
@@ -49,16 +48,13 @@ app.post("/api/login", async (req, res) => {
     try {
         const { username, password } = req.body;
         const user = await User.findOne({ username });
-
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
-
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({ success: false, message: "Incorrect password" });
         }
-
         const token = jwt.sign({ username: user.username, role: user.role }, "secret_key", { expiresIn: "1h" });
         res.json({ success: true, token, role: user.role });
     } catch (error) {
@@ -67,45 +63,53 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
-// Fetch User Data Route
-app.get("/api/user/:username", async (req, res) => {
-    try {
-        const user = await User.findOne({ username: req.params.username }).select("-password");
-        if (!user) return res.status(404).json({ success: false, message: "User not found" });
+// ===================
+// Review Schema, Model, and Routes
+// ===================
 
-        res.json({ success: true, user });
+// Define Review Schema
+const ReviewSchema = new mongoose.Schema({
+    locationName: { type: String, required: true },
+    userName: { type: String, required: true },
+    content: { type: String, required: true },
+    rating: { type: Number, default: 0 },
+    createdAt: { type: Date, default: Date.now }
+});
+
+// Create Review Model
+const Review = mongoose.model("Review", ReviewSchema);
+
+// POST Route: Create a new review
+app.post("/api/reviews", async (req, res) => {
+    try {
+        const { locationName, userName, content, rating } = req.body;
+        const newReview = new Review({ locationName, userName, content, rating });
+        await newReview.save();
+        console.log("New review saved:", newReview);
+        res.json({ success: true, message: "Review posted!", review: newReview });
     } catch (error) {
-        console.error("Error fetching user data:", error);
-        res.status(500).json({ success: false, message: "Error fetching user data" });
+        console.error("Error creating review:", error);
+        res.json({ success: false, message: "Error creating review" });
     }
 });
 
-// Update User Data Route
-app.put("/api/user/:username", async (req, res) => {
+// GET Route: Fetch reviews for a specific location
+app.get("/api/reviews/:locationName", async (req, res) => {
     try {
-        const { fullName, email, phone, password } = req.body;
-
-        const updatedData = { fullName, email, phone };
-        if (password) {
-            updatedData.password = await bcrypt.hash(password, 10);
-        }
-
-        const user = await User.findOneAndUpdate(
-            { username: req.params.username },
-            updatedData,
-            { new: true }
-        );
-
-        if (!user) return res.status(404).json({ success: false, message: "User not found" });
-
-        res.json({ success: true, message: "User updated successfully!", user });
+        const { locationName } = req.params;
+        const reviews = await Review.find({ locationName }).sort({ createdAt: -1 });
+        res.json({ success: true, reviews });
     } catch (error) {
-        console.error("Error updating user data:", error);
-        res.status(500).json({ success: false, message: "Error updating user data" });
+        console.error("Error fetching reviews:", error);
+        res.json({ success: false, message: "Error fetching reviews" });
     }
 });
 
-// Serve the homepage on accessing the root URL
+// ===================
+// End of Review Routes
+// ===================
+
+// Default Route: Serve the MainPage.html when accessing the root URL
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "MCO Page", "index.html"));
 });

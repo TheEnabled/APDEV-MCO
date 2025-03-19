@@ -1,110 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dimsum Treats San Mateo</title>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Link to External CSS -->
-    <link rel="stylesheet" href="Files/CSSFiles/MainPage.css">
-    <link rel="stylesheet" href="Files/CSSFiles/AboutUs.css">
-    <link rel="stylesheet" href="Files/CSSFiles/Login.css">
-    <link rel="stylesheet" href="Files/CSSFiles/Locations.css">
-    <link rel="stylesheet" href="Files/CSSFiles/Branch1.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dimsum Treats San Mateo</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Link to External CSS -->
+  <link rel="stylesheet" href="Files/CSSFiles/MainPage.css">
+  <link rel="stylesheet" href="Files/CSSFiles/AboutUs.css">
+  <link rel="stylesheet" href="Files/CSSFiles/Login.css">
+  <link rel="stylesheet" href="Files/CSSFiles/Locations.css">
+  <link rel="stylesheet" href="Files/CSSFiles/Branch1.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
-
 <body>
-    <!-- Navigation Bar -->
-    <div class="nav-bar">
-        <div class="nav-links">
-          <a href="MainPage.html">HOME</a>
-          <a href="Locations.html">LOCATIONS</a>
-          <a href="About.html">ABOUT</a>
-          <a href="Cart.html">CART</a>
-          <a href="Login.html">LOG IN</a>
-        </div>
-        
-        <!-- User and Menu Icons -->
-        <div class="nav-icons">
-            <a href="#" id="profile-button">
-                <i class='bx bxs-user-circle'></i>
-            </a>
-            <a href="account.html" class="menu-button">
-                <i class='bx bx-menu'></i>
-            </a>
-        </div>
-        
-        <script src="auth.js"></script> 
+  <!-- Navigation Bar -->
+  <div class="nav-bar">
+    <div class="nav-links">
+      <a href="MainPage.html">HOME</a>
+      <a href="Locations.html">LOCATIONS</a>
+      <a href="About.html">ABOUT</a>
+      <a href="Cart.html">CART</a>
+      <a href="Login.html">LOG IN</a>
     </div>
-
-    <div class="branch-header">
-        Branch Locations
+    
+    <!-- User and Menu Icons -->
+    <div class="nav-icons">
+      <a href="#" id="profile-button">
+        <i class='bx bxs-user-circle'></i>
+      </a>
+      <a href="account.html" class="menu-button">
+        <i class='bx bx-menu'></i>
+      </a>
     </div>
+    
+    <script src="auth.js"></script>
+  </div>
 
-    <div class="branch">
-        <div class="branch-item">
-            <p class="branch-name"><b>Dimsum Treats San Mateo</b></p>
-            <div class="branch-contact">
-                <p><b>Contact Number:</b> <a href="tel:09673478379"><u>0967 347 8379</u></a></p>
-            </div>
-            <div class="branch-contact">
-                <p><strong>Operating hours:</strong> 11:00 AM - 11:00 PM</p>
-                <div class="map"></div>
-            </div>
+  <!-- Large Red Header (using Branch1.css styling) -->
+  <div class="branch-header">
+    <h1>Dimsum Treats San Mateo</h1>
+    <p><strong>Contact Number:</strong> <a href="tel:09673478379">0967 347 8379</a></p>
+    <p><strong>Operating Hours:</strong> 11:00 AM - 11:00 PM</p>
+    
+    <!-- Dropdown inside the header -->
+    <label for="branch-dropdown" style="color:red; font-size:20px;">Select Location:</label>
+    <select id="branch-dropdown" style="margin-left:10px;">
+      <option value="Dimsum Treats San Mateo">Dimsum Treats San Mateo</option>
+      <option value="Dimsum Treats Sta. Cruz">Dimsum Treats Sta. Cruz</option>
+      <option value="Dimsum Treats Malate">Dimsum Treats Malate</option>
+      <!-- Add more branches if needed -->
+    </select>
+    
+    <p style="margin-top:10px; color:red; font-size:26px;">
+      Current Branch: <span id="current-branch">Dimsum Treats San Mateo</span>
+    </p>
+  </div>
 
-            <hr class="review-divider">
+  <!-- Main Review Section -->
+  <div class="branch">
+    <div class="branch-item">
+      <hr class="review-divider">
+      <p class="review-header"><b>Branch Reviews</b></p>
+      
+      <div class="review-textbox">
+        <textarea id="review-textarea" placeholder="Write your review..."></textarea>
+      </div>
+      <button class="publish-btn" id="publish-btn"><strong>PUBLISH</strong></button>
 
-            <p class="review-header"><b>Branch Reviews</b></p>
-            <div class="review-textbox">
-                <textarea placeholder="Write your review..."></textarea>
-            </div>
-            <button class="publish-btn"><strong>PUBLISH</strong></button>
-            <div class="review-container">
-                <div class="review" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 8px; background-color: #f9f9f9;">
-                    <strong>Labazmotetee_mo69</strong>
-                    <p>I like this branch, ang daming ipis!</p>
-                </div>
-            </div>
-        </div>
+      <!-- Reviews will be inserted here -->
+      <div id="reviews-container" class="review-container">
+        <p class="no-reviews">Loading reviews...</p>
+      </div>
     </div>
+  </div>
 
-    <script>
-        document.querySelector('.publish-btn').addEventListener('click', function() {
-            const textarea = document.querySelector('.review-textbox textarea');
-            const reviewContainer = document.querySelector('.review-container');
-            
-            if (textarea.value.trim() !== "") {
-                // Create new review container
-                const newReview = document.createElement('div');
-                newReview.classList.add('review');
-                newReview.style.border = '1px solid #ccc';
-                newReview.style.padding = '10px';
-                newReview.style.marginBottom = '10px';
-                newReview.style.borderRadius = '8px';
-                newReview.style.backgroundColor = '#f9f9f9';
-
-                // Add sample username and the review text
-                const username = document.createElement('strong');
-                username.textContent = 'User';
-                const reviewText = document.createElement('p');
-                reviewText.textContent = textarea.value;
-
-                newReview.appendChild(username);
-                newReview.appendChild(reviewText);
-
-                // Insert the review at the top
-                reviewContainer.insertBefore(newReview, reviewContainer.firstChild);
-
-                // Clear the textarea
-                textarea.value = '';
-            }
-        });
-    </script>
-
+  <!-- Include branch1.js from the same folder -->
+  <script src="Branch1.js"></script>
 </body>
 </html>
