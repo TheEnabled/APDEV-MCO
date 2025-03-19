@@ -64,11 +64,47 @@
                 <textarea placeholder="Write your review..."></textarea>
             </div>
             <button class="publish-btn"><strong>PUBLISH</strong></button>
-            <div class="review">
-                <strong>Labazmotetee_mo69</strong>
-                <p>I like this branch, ang daming ipis!</p>
+            <div class="review-container">
+                <div class="review" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 8px; background-color: #f9f9f9;">
+                    <strong>Labazmotetee_mo69</strong>
+                    <p>I like this branch, ang daming ipis!</p>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.querySelector('.publish-btn').addEventListener('click', function() {
+            const textarea = document.querySelector('.review-textbox textarea');
+            const reviewContainer = document.querySelector('.review-container');
+            
+            if (textarea.value.trim() !== "") {
+                // Create new review container
+                const newReview = document.createElement('div');
+                newReview.classList.add('review');
+                newReview.style.border = '1px solid #ccc';
+                newReview.style.padding = '10px';
+                newReview.style.marginBottom = '10px';
+                newReview.style.borderRadius = '8px';
+                newReview.style.backgroundColor = '#f9f9f9';
+
+                // Add sample username and the review text
+                const username = document.createElement('strong');
+                username.textContent = 'User';
+                const reviewText = document.createElement('p');
+                reviewText.textContent = textarea.value;
+
+                newReview.appendChild(username);
+                newReview.appendChild(reviewText);
+
+                // Insert the review at the top
+                reviewContainer.insertBefore(newReview, reviewContainer.firstChild);
+
+                // Clear the textarea
+                textarea.value = '';
+            }
+        });
+    </script>
+
 </body>
 </html>
