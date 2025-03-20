@@ -50,3 +50,75 @@
     border: 1px solid red;
     margin: 20px 0 0 0;
 }
+
+/* Navigation Bar (Already Styled) */
+
+/* Account Header */
+.account-header {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffe5e5;
+    border-bottom: 2px solid red;
+}
+.account-header h1 {
+    color: red;
+    font-weight: bold;
+}
+.account-header p {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* User Info Container */
+.user-info-container {
+    width: 60%;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid red;
+}
+.user-info-container h2 {
+    color: red;
+    text-align: center;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: red;
+}
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid red;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Buttons */
+button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+button:hover {
+    background-color: pink;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .user-info-container {
+        width: 90%;
+    }
+}
