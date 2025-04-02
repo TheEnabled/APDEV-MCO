@@ -1,18 +1,31 @@
 document.addEventListener('DOMContentLoaded', function () {
     const cartItems = document.querySelectorAll('.cart-item');
 
+    function updateCartStorage() {
+        const cartData = [];
+        cartItems.forEach(item => {
+            const name = item.querySelector('h2').textContent;
+            const quantity = parseInt(item.querySelector('.quantity-input').value, 10);
+            const basePrice = parseFloat(item.querySelector('.price').getAttribute('data-price'));
+            if (quantity > 0) { // Store only items with quantity > 0
+                cartData.push({ name, quantity, price: basePrice });
+            }
+        });
+
+        // Save updated cart to localStorage
+        localStorage.setItem('cartItems', JSON.stringify(cartData));
+    }
+
     cartItems.forEach(item => {
         const minusBtn = item.querySelector('.bx-minus-circle');
         const plusBtn = item.querySelector('.bx-plus-circle');
         const quantityInput = item.querySelector('.quantity-input');
-        const priceElement = item.querySelector('.price');
-        const basePrice = parseFloat(priceElement.getAttribute('data-price')); // Get unique price
 
         // Increase Quantity
         plusBtn.addEventListener('click', function () {
             let quantity = parseInt(quantityInput.value, 10);
             quantityInput.value = quantity + 1;
-            updatePrice();
+            updateCartStorage();
         });
 
         // Decrease Quantity (Allow 0, Prevent Negative)
@@ -20,77 +33,40 @@ document.addEventListener('DOMContentLoaded', function () {
             let quantity = parseInt(quantityInput.value, 10);
             if (quantity > 0) {
                 quantityInput.value = quantity - 1;
-                updatePrice();
+                updateCartStorage();
             }
         });
 
-        // Update the price display dynamically
-        function updatePrice() {
-            let quantity = parseInt(quantityInput.value, 10);
-            priceElement.textContent = `₱${(basePrice * quantity).toFixed(2)}`;
-        }
-    });
-});
-
-
-
-
-checkoutForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const cartItems = getCartItems();
-    if (cartItems.length === 0) {
-        alert('Your cart is empty. Please add items before checking out.');
-        return;
-    }
-
-    const { subtotal, deliveryFee, total } = calculateTotals(cartItems);
-
-    // Collect form data
-    const formData = {
-        name: document.getElementById('name').value,
-        address: document.getElementById('address').value,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value,
-        username: username || null, // Include username if logged in
-        paymentMethod: document.querySelector('input[name="payment"]:checked').value,
-        orderItems: cartItems.map(item => ({
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price
-        })),
-        subtotal,
-        deliveryFee,
-        total
-    };
-
-    try {
-        // Send data to server
-        const response = await fetch('/api/orders', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token ? `Bearer ${token}` : ''
-            },
-            body: JSON.stringify(formData)
+        // Manual input update
+        quantityInput.addEventListener('input', function () {
+            updateCartStorage();
         });
+    });
 
-        const result = await response.json();
+    // Save cart when clicking "Proceed to Checkout"
+    document.querySelector('.show-more a').addEventListener('click', function () {
+        updateCartStorage(); 
+    });
 
-        if (result.success) {
-            // Clear cart after successful order
-            localStorage.removeItem('cartItems');
+    // Load cart data in Checkout.html
+    if (window.location.pathname.includes('Checkout.html')) {
+        const storedCart = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const cartContainer = document.getElementById('checkout-cart');
+        cartContainer.innerHTML = '';
 
-            // Show success message
-            alert(`Order placed successfully! Your order ID is: ${result.orderId}`);
-
-            // Redirect to confirmation page or home
-            window.location.href = 'OrderConfirmation.html?orderId=' + result.orderId;
+        if (storedCart.length === 0) {
+            cartContainer.innerHTML = '<p>Your cart is empty.</p>';
         } else {
-            alert(`Error: ${result.message || 'There was an error processing your order'}`);
+            storedCart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('checkout-item');
+                itemElement.innerHTML = `
+                    <h3>${item.name}</h3>
+                    <p>Quantity: ${item.quantity}</p>
+                    <p>Price: ₱${(item.quantity * item.price).toFixed(2)}</p>
+                `;
+                cartContainer.appendChild(itemElement);
+            });
         }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('There was an error connecting to the server. Please try again later.');
     }
 });
