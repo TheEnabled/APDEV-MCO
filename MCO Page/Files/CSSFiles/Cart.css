@@ -108,6 +108,20 @@ h1 {
 
 .quantity-container {
     margin: 0 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px
+}
+
+.quantity-btn {
+    font-size: 24px;
+    cursor: pointer;
+    color: red;
+    transition: color 0.2s ease-in-out;
+}
+
+.quantity-btn:hover {
+    color: black;
 }
 
 .quantity-input {
