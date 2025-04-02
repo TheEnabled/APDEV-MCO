@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const username = localStorage.getItem("username");
-    const token = localStorage.getItem("token");  // Fetch the token as well
+    const token = localStorage.getItem("token");
     const statusMessage = document.getElementById("status-message");
 
     if (!username || !token) {
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    // Fetch user data with proper URL
+    // Fetch user data from MongoDB
     try {
         const response = await fetch(`http://localhost:3000/api/user/${username}`, {
             method: "GET",
@@ -53,7 +53,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const response = await fetch(`http://localhost:3000/api/user/${username}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify(updatedData)
             });
 

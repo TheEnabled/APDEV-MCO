@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Serve static files from your public folder (adjust if necessary)
+// Serve static files
 app.use(express.static(path.join(__dirname, "MCO Page")));
 
 // Connect to MongoDB
@@ -28,6 +28,18 @@ const UserSchema = new mongoose.Schema({
     phone: { type: String }
 });
 const User = mongoose.model("User", UserSchema);
+
+// Middleware: Verify JWT Token
+const verifyToken = (req, res, next) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ success: false, message: "Access denied" });
+    
+    jwt.verify(token, "secret_key", (err, decoded) => {
+        if (err) return res.status(403).json({ success: false, message: "Invalid token" });
+        req.username = decoded.username;
+        next();
+    });
+};
 
 // Signup Route
 app.post("/api/signup", async (req, res) => {
@@ -63,11 +75,32 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
-// ===================
-// Review Schema, Model, and Routes
-// ===================
+// Fetch User Info
+app.get("/api/user/:username", verifyToken, async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username });
+        if (!user) return res.status(404).json({ success: false, message: "User not found" });
+        res.json({ success: true, user });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error fetching user data" });
+    }
+});
 
-// Define Review Schema
+// Update User Info
+app.put("/api/user/:username", verifyToken, async (req, res) => {
+    try {
+        const updates = req.body;
+        if (updates.password) updates.password = await bcrypt.hash(updates.password, 10);
+        
+        const user = await User.findOneAndUpdate({ username: req.params.username }, updates, { new: true });
+        if (!user) return res.status(404).json({ success: false, message: "User not found" });
+        res.json({ success: true, user });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error updating user" });
+    }
+});
+
+// Review Schema and Model
 const ReviewSchema = new mongoose.Schema({
     locationName: { type: String, required: true },
     userName: { type: String, required: true },
@@ -75,8 +108,6 @@ const ReviewSchema = new mongoose.Schema({
     rating: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now }
 });
-
-// Create Review Model
 const Review = mongoose.model("Review", ReviewSchema);
 
 // POST Route: Create a new review
@@ -105,11 +136,7 @@ app.get("/api/reviews/:locationName", async (req, res) => {
     }
 });
 
-// ===================
-// End of Review Routes
-// ===================
-
-// Default Route: Serve the MainPage.html when accessing the root URL
+// Default Route
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "MCO Page", "index.html"));
 });
