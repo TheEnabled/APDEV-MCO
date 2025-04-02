@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Information</title>
+    <title>Admin Dashboard</title>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -34,41 +34,43 @@
                     <i class='bx bx-menu'></i>
                 </a>
             </div>
-            
-            <script src="auth.js"></script> <!-- Ensure this script is included -->
-            
         </div>
         
         <!-- Account Information Section -->
         <section class="account-info">
-            <h1>Account Information</h1>
+            <h1>Admin Dashboard</h1>
             <div class="role-buttons">
-                <button class="role">ADMIN</button>
+                <button class="role active">ADMIN</button>
                 <button class="role">BRANCH</button>
             </div>
             <div class="user-details">
-                <p><strong>USERNAME:</strong> <a href="#">CHANGE USERNAME?</a></p>
-                <p><strong>PASSWORD:</strong> <a href="#">CHANGE PASSWORD?</a></p>
-                <p><strong>CONTACT NUMBER:</strong> <a href="#">EDIT CONTACT NO?</a></p>
-                <p><strong>EMAIL ADDRESS:</strong> <a href="#">EDIT EMAIL ADDRESS?</a></p>
+                <p><strong>USERNAME:</strong> <a href="#" class="edit-link" data-field="username">CHANGE USERNAME?</a></p>
+                <p><strong>PASSWORD:</strong> <a href="#" class="edit-link" data-field="password">CHANGE PASSWORD?</a></p>
+                <p><strong>CONTACT NUMBER:</strong> <a href="#" class="edit-link" data-field="phone">EDIT CONTACT NO?</a></p>
+                <p><strong>EMAIL ADDRESS:</strong> <a href="#" class="edit-link" data-field="email">EDIT EMAIL ADDRESS?</a></p>
             </div>
+            <!-- Edit form will be inserted here by JavaScript -->
         </section>
         
         <!-- Other Users Section -->
         <section class="other-users">
-            <h2>Other Users</h2>
-            <div class="user-grid">
-                <button class="user">MANAGER</button>
-                <button class="user">ASSISTANT MANAGER</button>
-                <button class="user">WAITER 1</button>
-                <button class="user">CUSTOMER 1</button>
-                <button class="user">CUSTOMER 2</button>
-                <button class="user">CUSTOMER 3</button>
-                <button class="user">CUSTOMER 4</button>
-                <button class="user">CUSTOMER 5</button>
-                <button class="user">CUSTOMER 6</button>
-            </div>
+            <h2>Active User Accounts</h2>
+            <table id="userTable">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Users will be inserted here dynamically -->
+                </tbody>
+            </table>
         </section>
     </div>
+
+    <script src="auth.js"></script>
+    <script src="admin.js"></script>
 </body>
 </html>

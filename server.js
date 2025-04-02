@@ -5,6 +5,7 @@ const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const { ObjectId } = require("mongoose").Types;
 
 const app = express();
 app.use(express.json());
@@ -29,17 +30,20 @@ const UserSchema = new mongoose.Schema({
 });
 const User = mongoose.model("User", UserSchema);
 
-// Middleware: Verify JWT Token
 const verifyToken = (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) return res.status(401).json({ success: false, message: "Access denied" });
-    
+
     jwt.verify(token, "secret_key", (err, decoded) => {
         if (err) return res.status(403).json({ success: false, message: "Invalid token" });
+
         req.username = decoded.username;
+        req.role = decoded.role;  // ✅ Extract role from the token
         next();
     });
 };
+
+
 
 // Signup Route
 app.post("/api/signup", async (req, res) => {
@@ -136,6 +140,152 @@ app.get("/api/reviews/:locationName", async (req, res) => {
     }
 });
 
+//Edit Reviews
+app.put("/api/reviews/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { content } = req.body;
+
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: "Invalid review ID." });
+        }
+
+        const updatedReview = await Review.findByIdAndUpdate(
+            id,
+            { content },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedReview) {
+            return res.status(404).json({ success: false, message: "Review not found." });
+        }
+
+        res.json({ success: true, message: "Review updated successfully.", review: updatedReview });
+    } catch (error) {
+        console.error("Error updating review:", error);
+        res.status(500).json({ success: false, message: "Internal server error." });
+    }
+});
+
+  //Delete reviews
+  app.delete("/api/reviews/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: "Invalid review ID." });
+        }
+
+        const deletedReview = await Review.findByIdAndDelete(id);
+
+        if (!deletedReview) {
+            return res.status(404).json({ success: false, message: "Review not found." });
+        }
+
+        res.json({ success: true, message: "Review deleted successfully." });
+    } catch (error) {
+        console.error("Error deleting review:", error);
+        res.status(500).json({ success: false, message: "Internal server error." });
+    }
+});
+
+// Fetch all users with role "user"
+app.get("/api/users", verifyToken, async (req, res) => {
+    if (req.role !== "admin") { // ✅ Use req.role instead of req.username
+        return res.status(403).json({ success: false, message: "Access denied" });
+    }
+
+    try {
+        const users = await User.find({ role: "user" }); // Fetch only user accounts
+        res.json({ success: true, users });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ success: false, message: "Error fetching users" });
+    }
+});
+
+// Update User Info - Make sure this route is correctly implemented in your server.js
+app.put("/api/user/:username", verifyToken, async (req, res) => {
+    try {
+        // Check if user is updating their own account or if they're an admin
+        if (req.username !== req.params.username && req.role !== "admin") {
+            return res.status(403).json({ 
+                success: false, 
+                message: "You can only update your own information" 
+            });
+        }
+        
+        const updates = req.body;
+        
+        // If password is being updated, hash it first
+        if (updates.password) {
+            updates.password = await bcrypt.hash(updates.password, 10);
+        }
+        
+        // Find and update the user
+        const user = await User.findOneAndUpdate(
+            { username: req.params.username }, 
+            updates, 
+            { new: true }
+        );
+        
+        if (!user) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "User not found" 
+            });
+        }
+        
+        // Return success with updated user info (excluding password)
+        const userResponse = {
+            username: user.username,
+            email: user.email,
+            role: user.role,
+            phone: user.phone
+        };
+        
+        res.json({ 
+            success: true, 
+            message: "User updated successfully", 
+            user: userResponse 
+        });
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ 
+            success: false, 
+            message: "Error updating user information" 
+        });
+    }
+});
+
+
+// Delete a user by username
+app.delete("/api/users/:username", verifyToken, async (req, res) => {
+    try {
+        // Check if requesting user is admin
+        if (req.role !== "admin") {
+            return res.status(403).json({ success: false, message: "Access denied" });
+        }
+
+        const result = await User.deleteOne({ username: req.params.username });
+
+        if (result.deletedCount === 1) {
+            res.json({ success: true, message: "User deleted successfully." });
+        } else {
+            res.json({ success: false, message: "User not found." });
+        }
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).json({ success: false, message: "Error deleting user" });
+    }
+});
+
+
+
+
+
+
+  
 // Default Route
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "MCO Page", "index.html"));

@@ -1,4 +1,3 @@
-// Ensure the document is fully loaded before running scripts
 window.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
@@ -22,7 +21,9 @@ window.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('role', data.role);
                     localStorage.setItem('token', data.token);
                     alert('Login successful!');
-                    window.location.href = 'UserAccount.html';
+
+                    // Redirect based on role immediately
+                    window.location.href = data.role === 'admin' ? 'AdminProfile.html' : 'UserAccount.html';
                 } else {
                     alert('Invalid username or password.');
                 }
@@ -36,22 +37,17 @@ window.addEventListener('DOMContentLoaded', () => {
     // User Authentication Check
     const userButton = document.querySelector('.user-button');
     if (userButton) {
-        userButton.addEventListener('click', (event) => {
-            const token = localStorage.getItem('token');
-            const role = localStorage.getItem('role');
+        const token = localStorage.getItem('token');
+        const role = localStorage.getItem('role');
 
-            if (!token || !role) {
+        if (!token || !role) {
+            userButton.addEventListener('click', (event) => {
                 event.preventDefault();
                 alert('You need to log in!');
-                return;
-            }
-
-            // Redirect to the appropriate page based on role
-            if (role === 'admin') {
-                userButton.setAttribute('href', 'AdminProfile.html');
-            } else {
-                userButton.setAttribute('href', 'UserAccount.html');
-            }
-        });
+            });
+        } else {
+            // Set the correct href based on role immediately
+            userButton.setAttribute('href', role === 'admin' ? 'AdminProfile.html' : 'UserAccount.html');
+        }
     }
 });
