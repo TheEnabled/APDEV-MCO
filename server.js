@@ -280,9 +280,60 @@ app.delete("/api/users/:username", verifyToken, async (req, res) => {
     }
 });
 
+// Order Schema and Model
+const OrderSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    address: { type: String, required: true },
+    phone: { type: String, required: true },
+    email: { type: String, required: true },
+    username: { type: String }, // Optional for logged-in users
+    paymentMethod: { type: String, required: true },
+    orderItems: [
+        {
+            name: { type: String, required: true },
+            quantity: { type: Number, required: true },
+            price: { type: Number, required: true }
+        }
+    ],
+    subtotal: { type: Number, required: true },
+    deliveryFee: { type: Number, required: true },
+    total: { type: Number, required: true },
+    status: { type: String, default: "Pending" }, // Default status
+    createdAt: { type: Date, default: Date.now }
+});
 
+const Order = mongoose.model("Order", OrderSchema);
 
+// POST Route: Process checkout and create an order
+app.post("/api/orders", verifyToken, async (req, res) => {
+    try {
+        const { name, address, phone, email, username, paymentMethod, orderItems, subtotal, deliveryFee, total } = req.body;
 
+        if (!name || !address || !phone || !email || !paymentMethod || !orderItems.length) {
+            return res.status(400).json({ success: false, message: "All fields are required." });
+        }
+
+        const newOrder = new Order({
+            name,
+            address,
+            phone,
+            email,
+            username: username || null, // Include username if logged in
+            paymentMethod,
+            orderItems,
+            subtotal,
+            deliveryFee,
+            total
+        });
+
+        await newOrder.save();
+
+        res.json({ success: true, message: "Order placed successfully!", orderId: newOrder._id });
+    } catch (error) {
+        console.error("Order Processing Error:", error);
+        res.status(500).json({ success: false, message: "Error processing order" });
+    }
+});
 
 
   

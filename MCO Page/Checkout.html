@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Dimsum Treats</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="Files/CSSFiles/Checkout.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <div class="nav-links">
+                <a href="index.html">HOME</a>
+                <a href="Locations.html">LOCATIONS</a>
+                <a href="About.html">ABOUT</a>
+                <a href="Cart.html">CART</a>
+                <a href="Login.html" id="login-link">LOG IN</a>
+            </div>
+            <!-- User and Menu Icons -->
+            <div class="nav-icons">
+                <a href="#" id="profile-button">
+                    <i class='bx bxs-user-circle'></i>
+                </a>
+                <a href="UserAccount.html" class="menu-button">
+                    <i class='bx bx-menu'></i>
+                </a>
+            </div>
+            
+            <script src="auth.js"></script>
+        </div>
+
+        <main>
+            <h1>CHECKOUT</h1>
+
+            <div class="checkout-container">
+                <div class="checkout-summary">
+                    <h2>Order Summary</h2>
+                    <div class="order-items" id="order-items-container">
+                        <!-- Order items will be populated dynamically -->
+                    </div>
+                    <hr>
+                    <div class="order-total">
+                        <p><strong>Subtotal</strong></p>
+                        <p class="subtotal-price" id="subtotal-price">₱0.00</p>
+                    </div>
+                    <div class="order-total">
+                        <p><strong>Delivery Fee</strong></p>
+                        <p class="delivery-fee" id="delivery-fee">₱50.00</p>
+                    </div>
+                    <hr>
+                    <div class="order-total grand-total">
+                        <p><strong>TOTAL</strong></p>
+                        <p class="total-price" id="total-price">₱0.00</p>
+                    </div>
+                </div>
+
+                <div class="checkout-details">
+                    <h2>Delivery Information</h2>
+                    <form id="checkout-form">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Delivery Address</label>
+                            <textarea id="address" name="address" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                        </div>
+                        
+                        <h2>Payment Method</h2>
+                        <div class="payment-methods">
+                            <div class="payment-method">
+                                <input type="radio" id="cod" name="payment" value="cod" checked>
+                                <label for="cod">Cash on Delivery</label>
+                            </div>
+                            <div class="payment-method">
+                                <input type="radio" id="gcash" name="payment" value="gcash">
+                                <label for="gcash">GCash</label>
+                            </div>
+                            <div class="payment-method">
+                                <input type="radio" id="card" name="payment" value="card">
+                                <label for="card">Credit/Debit Card</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group card-details" id="card-details" style="display: none;">
+                            <div class="form-group">
+                                <label for="card-number">Card Number</label>
+                                <input type="text" id="card-number" placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="expiry">Expiry Date</label>
+                                    <input type="text" id="expiry" placeholder="MM/YY">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input type="text" id="cvv" placeholder="123">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group gcash-details" id="gcash-details" style="display: none;">
+                            <label for="gcash-number">GCash Number</label>
+                            <input type="text" id="gcash-number" placeholder="09XX XXX XXXX">
+                        </div>
+                        
+                        <button type="submit" class="submit-button">PLACE ORDER</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <div class="mascot">
+            <img src="Files/images/dumpling1.png" alt="Siomai mascot">
+        </div>
+    </div>
+    
+    <!-- Horizontal Line -->
+    <hr class="footer-line">
+    
+    <script>
+        // Check if user is logged in
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+        
+        // Function to update UI based on login status
+        function updateUIForLoggedInUser() {
+            if (token) {
+                document.getElementById('login-link').textContent = 'ACCOUNT';
+                document.getElementById('login-link').href = 'UserAccount.html';
+                
+                // Pre-fill form if user is logged in
+                if (username) {
+                    // Fetch user data to pre-fill the form
+                    fetch(`/api/user/${username}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const user = data.user;
+                            document.getElementById('name').value = user.fullName || '';
+                            document.getElementById('email').value = user.email || '';
+                            document.getElementById('phone').value = user.phone || '';
+                        }
+                    })
+                    .catch(error => console.error('Error fetching user data:', error));
+                }
+            }
+        }
+        
+        // Call the function to update UI
+        updateUIForLoggedInUser();
+        
+        // Get cart items from localStorage
+        function getCartItems() {
+            return JSON.parse(localStorage.getItem('cartItems')) || [];
+        }
+        
+        // Format price to Philippine Peso
+        function formatPrice(price) {
+            return '₱' + price.toFixed(2);
+        }
+        
+        // Calculate totals
+        function calculateTotals(items) {
+            const subtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const deliveryFee = 50; // Fixed delivery fee
+            const total = subtotal + deliveryFee;
+            
+            document.getElementById('subtotal-price').textContent = formatPrice(subtotal);
+            document.getElementById('delivery-fee').textContent = formatPrice(deliveryFee);
+            document.getElementById('total-price').textContent = formatPrice(total);
+            
+            return { subtotal, deliveryFee, total };
+        }
+        
+        // Load cart items and display in order summary
+        function loadCartItems() {
+            const cartItems = getCartItems();
+            const orderItemsContainer = document.getElementById('order-items-container');
+            orderItemsContainer.innerHTML = '';
+            
+            if (cartItems.length === 0) {
+                orderItemsContainer.innerHTML = '<p>Your cart is empty. <a href="index.html">Continue shopping</a></p>';
+                return;
+            }
+            
+            cartItems.forEach((item, index) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'order-item';
+                itemElement.innerHTML = `
+                    <p>${item.name} (${item.quantity})</p>
+                    <p class="item-price">${formatPrice(item.price * item.quantity)}</p>
+                `;
+                orderItemsContainer.appendChild(itemElement);
+                
+                // Add divider except for last item
+                if (index < cartItems.length - 1) {
+                    const divider = document.createElement('hr');
+                    orderItemsContainer.appendChild(divider);
+                }
+            });
+            
+            // Calculate and update totals
+            calculateTotals(cartItems);
+        }
+        
+        // Load cart items when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCartItems();
+            
+            // Payment method toggle
+            const paymentMethods = document.querySelectorAll('input[name="payment"]');
+            const cardDetails = document.getElementById('card-details');
+            const gcashDetails = document.getElementById('gcash-details');
+            
+            paymentMethods.forEach(method => {
+                method.addEventListener('change', function() {
+                    if (this.value === 'card') {
+                        cardDetails.style.display = 'block';
+                        gcashDetails.style.display = 'none';
+                    } else if (this.value === 'gcash') {
+                        cardDetails.style.display = 'none';
+                        gcashDetails.style.display = 'block';
+                    } else {
+                        cardDetails.style.display = 'none';
+                        gcashDetails.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Form submission
+            const checkoutForm = document.getElementById('checkout-form');
+            checkoutForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const cartItems = getCartItems();
+                if (cartItems.length === 0) {
+                    alert('Your cart is empty. Please add items before checking out.');
+                    return;
+                }
+                
+                const { subtotal, deliveryFee, total } = calculateTotals(cartItems);
+                
+                // Collect form data
+                const formData = {
+                    name: document.getElementById('name').value,
+                    address: document.getElementById('address').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    username: username || null, // Include username if logged in
+                    paymentMethod: document.querySelector('input[name="payment"]:checked').value,
+                    orderItems: cartItems.map(item => ({
+                        name: item.name,
+                        quantity: item.quantity,
+                        price: item.price
+                    })),
+                    subtotal,
+                    deliveryFee,
+                    total
+                };
+                
+                try {
+                    // Send data to server
+                    const response = await fetch('/api/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': token ? `Bearer ${token}` : ''
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Clear cart after successful order
+                        localStorage.removeItem('cartItems');
+                        
+                        // Show success message
+                        alert(`Order placed successfully! Your order ID is: ${result.orderId}`);
+                        
+                        // Redirect to confirmation page or home
+                        window.location.href = 'OrderConfirmation.html?orderId=' + result.orderId;
+                    } else {
+                        alert(`Error: ${result.message || 'There was an error processing your order'}`);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('There was an error connecting to the server. Please try again later.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
